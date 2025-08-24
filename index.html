@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>ZenoMoz Key 🤑</title>
+  <title>ZenoMozHub</title>
   <style>
     body {
       background-color: black;
@@ -13,6 +13,13 @@
       height: 100vh;
       margin: 0;
       font-family: Arial, sans-serif;
+      color: white;
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 20px;
     }
 
     .textbox {
@@ -45,17 +52,42 @@
       background-color: gray;
       cursor: default;
     }
+
+    #mainGUI {
+      display: none; /* hidden at start */
+    }
   </style>
 </head>
 <body>
 
-  <div class="textbox" id="keyText">ᘔᗴᑎO𝒎𝒐𝒛𝘩𝘶𝘣2025</div>
-  <button class="btn" id="copyBtn">🔑 Copy 🔑</button>
+  <!-- First screen -->
+  <div id="intro">
+    <h1>🎉 Congrats! 🎉</h1>
+    <button class="btn" id="claimBtn">Claim Key</button>
+  </div>
+
+  <!-- Main GUI (hidden at first) -->
+  <div id="mainGUI">
+    <div class="textbox" id="keyText">ᘔᗴᑎO𝒎𝒐𝒛𝘩𝘶𝘣2025</div>
+    <button class="btn" id="copyBtn">🔑 Copy 🔑</button>
+  </div>
 
   <script>
+    const claimBtn = document.getElementById("claimBtn");
+    const intro = document.getElementById("intro");
+    const mainGUI = document.getElementById("mainGUI");
     const copyBtn = document.getElementById("copyBtn");
     const keyText = document.getElementById("keyText").innerText;
 
+    // Claim button -> show GUI
+    claimBtn.addEventListener("click", () => {
+      intro.style.display = "none";
+      mainGUI.style.display = "flex";
+      mainGUI.style.flexDirection = "column";
+      mainGUI.style.alignItems = "center";
+    });
+
+    // Copy button -> copy key
     copyBtn.addEventListener("click", () => {
       navigator.clipboard.writeText(keyText).then(() => {
         copyBtn.textContent = "Copied! ☑";
