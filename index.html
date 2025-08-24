@@ -15,26 +15,104 @@
       font-family: Arial, sans-serif;
       color: white;
       text-align: center;
+      overflow: hidden;
     }
 
     h1 {
-      font-size: 2.5rem;
-      margin-bottom: 20px;
+      font-size: 4rem;
+      margin-bottom: 40px;
     }
 
     .textbox {
       background-color: white;
       color: black;
-      font-size: 2rem;
-      padding: 20px 40px;
-      border-radius: 12px;
-      margin-bottom: 20px;
+      font-size: 3rem;
+      padding: 30px 60px;
+      border-radius: 20px;
+      margin-bottom: 30px;
       text-align: center;
       user-select: text;
+      font-weight: bold;
     }
 
     .btn {
       background-color: red;
+      color: white;
+      font-size: 2rem;
+      padding: 18px 50px;
+      border: none;
+      border-radius: 40px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .btn:hover {
+      background-color: darkred;
+    }
+
+    .btn:disabled {
+      background-color: gray;
+      cursor: default;
+    }
+
+    #mainGUI {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      animation: slideUp 0.8s ease forwards;
+      opacity: 0;
+    }
+
+    @keyframes slideUp {
+      from {
+        transform: translateY(100px);
+        opacity: 0;
+      }
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- First screen -->
+  <div id="intro">
+    <h1>🎉 Congrats! 🎉</h1>
+    <button class="btn" id="claimBtn">Claim Key</button>
+  </div>
+
+  <!-- Main GUI (hidden at first) -->
+  <div id="mainGUI">
+    <div class="textbox" id="keyText">ᘔᗴᑎO𝒎𝒐𝒛𝘩𝘶𝘣2025</div>
+    <button class="btn" id="copyBtn">🔑 Copy 🔑</button>
+  </div>
+
+  <script>
+    const claimBtn = document.getElementById("claimBtn");
+    const intro = document.getElementById("intro");
+    const mainGUI = document.getElementById("mainGUI");
+    const copyBtn = document.getElementById("copyBtn");
+    const keyText = document.getElementById("keyText").innerText;
+
+    // Claim button -> show GUI with animation
+    claimBtn.addEventListener("click", () => {
+      intro.style.display = "none";
+      mainGUI.style.display = "flex";
+    });
+
+    // Copy button -> copy key
+    copyBtn.addEventListener("click", () => {
+      navigator.clipboard.writeText(keyText).then(() => {
+        copyBtn.textContent = "Copied! ☑";
+        copyBtn.disabled = true;
+      });
+    });
+  </script>
+
+</body>
+</html>      background-color: red;
       color: white;
       font-size: 1.2rem;
       padding: 12px 30px;
