@@ -89,8 +89,9 @@
     <button class="btn" id="copyBtn">🔑 Copy 🔑</button>
   </div>
 
-  <!-- Sound effect -->
-  <audio id="clickSound" src="click.mp3" preload="auto"></audio>
+  <!-- Sounds -->
+  <audio id="claimSound" src="claim.mp3" preload="auto"></audio>
+  <audio id="copySound" src="copy.mp3" preload="auto"></audio>
 
   <script>
     const claimBtn = document.getElementById("claimBtn");
@@ -98,24 +99,24 @@
     const mainGUI = document.getElementById("mainGUI");
     const copyBtn = document.getElementById("copyBtn");
     const keyText = document.getElementById("keyText").innerText;
-    const clickSound = document.getElementById("clickSound");
+    const claimSound = document.getElementById("claimSound");
+    const copySound = document.getElementById("copySound");
 
-    // Play sound
-    function playClickSound() {
-      clickSound.currentTime = 0; // reset if played already
-      clickSound.play();
+    function playSound(sound) {
+      sound.currentTime = 0; // reset if played already
+      sound.play();
     }
 
     // Claim button -> show GUI with animation
     claimBtn.addEventListener("click", () => {
-      playClickSound();
+      playSound(claimSound);
       intro.style.display = "none";
       mainGUI.style.display = "flex";
     });
 
     // Copy button -> copy key
     copyBtn.addEventListener("click", () => {
-      playClickSound();
+      playSound(copySound);
       navigator.clipboard.writeText(keyText).then(() => {
         copyBtn.textContent = "Copied! ☑";
         copyBtn.disabled = true;
