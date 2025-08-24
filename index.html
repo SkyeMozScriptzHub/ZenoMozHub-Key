@@ -32,9 +32,67 @@
     font-weight: bold;
   }
 
-  input {
-    font-size: 1.8rem;
-    padding: 12px 20px;
+  .btn {
+    background-color: red;
+    color: white;
+    font-size: 2rem;
+    padding: 18px 50px;
+    border: none;
+    border-radius: 40px;
+    cursor: pointer;
+    transition: 0.3s;
+    margin: 5px;
+  }
+
+  .btn:hover { background-color: darkred; }
+  .btn:disabled { background-color: gray; cursor: default; }
+
+  #mainGUI { display: flex; flex-direction: column; align-items: center; }
+</style>
+</head>
+<body>
+
+<!-- Main GUI -->
+<div id="mainGUI">
+  <h1>🎉 Congrats! 🎉</h1>
+  <div class="textbox" id="keyText">ᘔᗴᑎO𝒎𝒐𝒛𝘩𝘶𝘣2025</div>
+  <button class="btn" id="copyBtn">🔑 Copy 🔑</button>
+  <!-- Back button (hidden at first) -->
+  <button class="btn" id="backBtn" style="display:none;">Back</button>
+</div>
+
+<!-- Sounds -->
+<audio id="copySound" src="copy.mp3" preload="auto"></audio>
+
+<script>
+const copyBtn = document.getElementById("copyBtn");
+const backBtn = document.getElementById("backBtn");
+const keyText = document.getElementById("keyText").innerText;
+const copySound = document.getElementById("copySound");
+
+function playSound(sound) {
+  sound.currentTime = 0;
+  sound.play();
+}
+
+// Copy key
+copyBtn.addEventListener("click", () => {
+  playSound(copySound);
+  navigator.clipboard.writeText(keyText).then(() => {
+    copyBtn.textContent = "Copied! ☑";
+    copyBtn.disabled = true;
+    backBtn.style.display = "block"; // show back button
+  });
+});
+
+// Back button -> open URL
+backBtn.addEventListener("click", () => {
+  window.open("https://hyper-denzeno-moz-collab.vercel.app/", "_blank");
+});
+</script>
+
+</body>
+</html>    padding: 12px 20px;
     border-radius: 12px;
     margin-bottom: 20px;
     border: none;
