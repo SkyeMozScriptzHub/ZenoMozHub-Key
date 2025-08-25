@@ -3,53 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ZenoMoz Hub - Get Key</title>
-
-<!-- Fonts -->
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&display=swap" rel="stylesheet">
-
-<!-- Particles.js -->
-<script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
-
-<style>
-  /* Reset */
-  * { margin:0; padding:0; box-sizing:border-box; font-family:'Orbitron', Arial, sans-serif; }
-
-  body, html { width:100%; height:100%; overflow:hidden; background:#111; color:#fff; }
-
-  /* Particles Background */
-  #particles-js { position:fixed; inset:0; z-index:0; }
-
-  /* XP HUD (top-left) */
-  #level-hud {
-    position: fixed;
-    top: 15px; left: 15px;
-    background: rgba(0,0,0,0.65);
-    padding:10px 12px;
-    border-radius:10px;
-    z-index: 999;
-    width:200px;
-    color:#fff;
-  }
-  #level-label { font-weight:700; margin-bottom:6px; font-size:13px; }
-  #xp-bar { background: rgba(255,255,255,0.12); border-radius:6px; height:12px; overflow:hidden; margin-bottom:6px; }
-  #xp-fill { background: linear-gradient(90deg,#ff4040,#ff9900); height:100%; width:0%; transition: width 0.35s ease; }
-  #xp-text { font-size:12px; opacity:0.9; }
-
-  /* Main GUI */
-  #mainGUI { position:absolute; top:50%; left:50%; transform:translate(-50%, -50%); text-align:center; z-index:10; }
-  h1 { font-size:3rem; margin-bottom:20px; color:#ff3333; }
-  .textbox { background:#fff; color:#000; font-size:2rem; padding:20px 50px; border-radius:20px; margin-bottom:20px; font-weight:bold; user-select:text; }
-  .btn { background:red; color:white; font-size:1.5rem; padding:12px 40px; border:none; border-radius:40px; cursor:pointer; margin:5px; transition:0.3s; }
-  .btn:hover { background:darkred; }
-  .btn:disabled { background:gray; cursor:default; }
-
-</style>
+<title>ZenoMozHub - Get Key</title>
+<link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-
-<!-- Particles Background -->
-<div id="particles-js"></div>
 
 <!-- XP HUD -->
 <div id="level-hud">
@@ -58,83 +15,87 @@
   <div id="xp-text">0 / 100 XP</div>
 </div>
 
-<!-- Main GUI -->
+<!-- Particles -->
+<div id="particles-js"></div>
+
+<!-- Key GUI -->
 <div id="mainGUI">
   <h1>🎉 Congratulations! 🎉</h1>
-  <div class="textbox" id="keyText">ᘔᗴᑎO𝒎𝒐𝒛𝘩𝘶𝘣2025</div>
+  <div class="textbox" id="keyText">ᘔᗴᑎO𝒎𝒐𝒛𝘩𝘂𝘣2025</div>
   <button class="btn" id="copyBtn">🔑 Get Key 🔑</button>
   <button class="btn" id="backBtn" style="display:none;">Back</button>
 </div>
 
-<!-- Audio -->
-<audio id="copySound" src="copy.mp3" preload="auto"></audio>
-<audio id="claimSound" src="claim.mp3" preload="auto"></audio>
+<!-- Sounds -->
+<audio id="clickSound" src="sounds/click.mp3"></audio>
+<audio id="claimSound" src="sounds/claim.mp3"></audio>
 
+<script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
 <script>
-/* ----------------- Particles.js ----------------- */
+/* --- Particles --- */
 particlesJS("particles-js", {
   "particles": {
-    "number": { "value": 100 },
+    "number": { "value": 120 },
     "color": { "value": "#ff3333" },
     "shape": { "type": "circle" },
     "opacity": { "value": 0.5 },
     "size": { "value": 3 },
     "line_linked": { "enable": true, "distance": 150, "color": "#ff3333", "opacity": 0.4, "width": 1 },
-    "move": { "enable": true, "speed": 1.2 }
+    "move": { "enable": true, "speed": 1.5 }
   },
   "interactivity": { "events": { "onhover": { "enable": true, "mode": "repulse" } } },
   "retina_detect": true
 });
 
-/* ----------------- XP System ----------------- */
+/* --- XP system --- */
 let xp = parseInt(localStorage.getItem("zmh_xp")) || 0;
 let level = parseInt(localStorage.getItem("zmh_level")) || 1;
-const maxLevel = 10000;
 const levelDisplay = document.getElementById("level-display");
 const xpFill = document.getElementById("xp-fill");
 const xpText = document.getElementById("xp-text");
 
-function xpNeededForLevel(lvl) { return 100 + (lvl - 1) * 20; }
-function saveProgress() {
-  localStorage.setItem("zmh_xp", xp);
-  localStorage.setItem("zmh_level", level);
-}
+function xpNeeded(lvl) { return 100 + (lvl-1)*20; }
 function updateHUD() {
-  let needed = xpNeededForLevel(level);
-  while(xp >= needed && level < maxLevel) { xp-=needed; level++; needed=xpNeededForLevel(level); }
-  const percent = Math.floor((xp/xpNeededForLevel(level))*100);
-  xpFill.style.width = percent + "%";
+  let needed = xpNeeded(level);
+  while(xp>=needed) { xp-=needed; level++; needed=xpNeeded(level); }
   levelDisplay.textContent = level;
-  xpText.textContent = `${xp} / ${xpNeededForLevel(level)} XP`;
-  saveProgress();
+  xpFill.style.width = Math.floor((xp/xpNeeded(level))*100)+'%';
+  xpText.textContent = xp+' / '+xpNeeded(level)+' XP';
+  localStorage.setItem("zmh_xp", xp); 
+  localStorage.setItem("zmh_level", level);
 }
 updateHUD();
 
-/* ----------------- Sounds & Buttons ----------------- */
+/* --- Clipboard / Key GUI --- */
 const copyBtn = document.getElementById("copyBtn");
 const backBtn = document.getElementById("backBtn");
 const keyText = document.getElementById("keyText").innerText;
-const copySound = document.getElementById("copySound");
+const clickSound = document.getElementById("clickSound");
 const claimSound = document.getElementById("claimSound");
 
-function playSound(sound){ sound.currentTime=0; sound.play(); }
+function playSound(audio) { audio.currentTime=0; audio.play(); }
 
-copyBtn.addEventListener("click", ()=>{
-  playSound(copySound);
+copyBtn.addEventListener("click",()=>{
+  playSound(clickSound);
   navigator.clipboard.writeText(keyText).then(()=>{
     copyBtn.textContent="Copied! ☑";
     copyBtn.disabled=true;
     backBtn.style.display="block";
-
-    // Add XP for claiming key
     xp+=10;
-    updateHUD();
     playSound(claimSound);
+    updateHUD();
   });
 });
 
-backBtn.addEventListener("click", ()=>{
-  window.open("https://official-amber.vercel.app/","_blank");
+backBtn.addEventListener("click",()=>{ window.open("https://hub.vercel.app","_blank"); });
+
+/* --- Sync XP across tabs --- */
+window.addEventListener("storage", e=>{
+  if(e.key==="zmh_xp" || e.key==="zmh_level"){ 
+    xp=parseInt(localStorage.getItem("zmh_xp"))||0; 
+    level=parseInt(localStorage.getItem("zmh_level"))||1; 
+    updateHUD(); 
+  }
 });
 </script>
 
