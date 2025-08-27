@@ -8,13 +8,6 @@
 </head>
 <body>
 
-<!-- XP HUD -->
-<div id="level-hud">
-  <div id="level-label">LVL <span id="level-display">1</span></div>
-  <div id="xp-bar"><div id="xp-fill"></div></div>
-  <div id="xp-text">0 / 100 XP</div>
-</div>
-
 <!-- Particles -->
 <div id="particles-js"></div>
 
@@ -47,25 +40,6 @@ particlesJS("particles-js", {
   "retina_detect": true
 });
 
-/* --- XP system --- */
-let xp = parseInt(localStorage.getItem("zmh_xp")) || 0;
-let level = parseInt(localStorage.getItem("zmh_level")) || 1;
-const levelDisplay = document.getElementById("level-display");
-const xpFill = document.getElementById("xp-fill");
-const xpText = document.getElementById("xp-text");
-
-function xpNeeded(lvl) { return 100 + (lvl-1)*20; }
-function updateHUD() {
-  let needed = xpNeeded(level);
-  while(xp>=needed) { xp-=needed; level++; needed=xpNeeded(level); }
-  levelDisplay.textContent = level;
-  xpFill.style.width = Math.floor((xp/xpNeeded(level))*100)+'%';
-  xpText.textContent = xp+' / '+xpNeeded(level)+' XP';
-  localStorage.setItem("zmh_xp", xp); 
-  localStorage.setItem("zmh_level", level);
-}
-updateHUD();
-
 /* --- Clipboard / Key GUI --- */
 const copyBtn = document.getElementById("copyBtn");
 const backBtn = document.getElementById("backBtn");
@@ -81,22 +55,11 @@ copyBtn.addEventListener("click",()=>{
     copyBtn.textContent="Copied! ☑";
     copyBtn.disabled=true;
     backBtn.style.display="block";
-    xp+=10;
     playSound(claimSound);
-    updateHUD();
   });
 });
 
-backBtn.addEventListener("click",()=>{ window.open("https://hub.vercel.app","_blank"); });
-
-/* --- Sync XP across tabs --- */
-window.addEventListener("storage", e=>{
-  if(e.key==="zmh_xp" || e.key==="zmh_level"){ 
-    xp=parseInt(localStorage.getItem("zmh_xp"))||0; 
-    level=parseInt(localStorage.getItem("zmh_level"))||1; 
-    updateHUD(); 
-  }
-});
+backBtn.addEventListener("click",()=>{ window.open("https://official-amber.vercel.app/","_blank"); });
 </script>
 
 </body>
